@@ -10,7 +10,7 @@ from matplotlib.pyplot import figure,plot,title,show
 from matplotlib import pyplot as plt
 
 
-def run_demo():
+def run_demo(conn_file):
 
     oscillator = models.Generic2dOscillator()
     white_matter = connectivity.Connectivity(load_default=True)
@@ -64,4 +64,14 @@ def run_demo():
     plt.close()
     #Show them
     #show()
+
+    numpy.save('roi_data.npy', tavg_data)
+
+
+if __name__ == '__main__':
+
+    conn_file = sys.argv[1]
+
+    run_demo(conn_file)
+
 
