@@ -10,4 +10,7 @@ RUN cd tvb-library && python setup.py install
 
 ADD demo1.py /opt/run.py
 
-CMD python /opt/run.py
+ADD conn76_weights.tsv conn76_weights.tsv
+
+CMD python /opt/run.py conn76_weights.tsv
+
