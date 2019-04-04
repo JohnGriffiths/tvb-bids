@@ -1,6 +1,10 @@
 # tvb-bids
+
+[![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/JohnGriffiths/tvb-bids/master)
+
 Testing ground for TVB bids apps
 
+---
 
 
 Currently there is a very minimal .py script running a simple tvb demo
