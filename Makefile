@@ -1,11 +1,13 @@
 docker-build:
 	docker build -t tvb-bids . 
 
+shell: 
+        docker run -v /c/Ubuntu_WSL/Code/libraries_of_others/github:/github:ro -it --entrypoint=bash tvb-bids
+
 run:
-        docker run -i --rm -v /c/Ubuntu_WSL/Code/libraries_of_others/github:/github:ro tvb-bids demo_num
+        docker run -i --rm -v /c/Ubuntu_WSL/Code/libraries_of_others/github:/github:ro tvb-bids
 
 
-shell:
-        docker run -v /c/Ubuntu_WSL/Code/libraries_of_others/github:/github:ro -it --entrypoint=bash tvb-bids demo_num
+
 
 
