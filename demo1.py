@@ -91,6 +91,10 @@ if __name__ == '__main__':
     conn_file = sys.argv[1]
     output_dir = sys.argv[2]
 
-    run_demo(conn_file,output_dir)
+    try:
+        run_demo(conn_file,output_dir)
+    except: 
+        import pdb
+        pdb.set_trace()
 
 
