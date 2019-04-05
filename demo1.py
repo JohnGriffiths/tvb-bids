@@ -10,7 +10,25 @@ from matplotlib.pyplot import figure,plot,title,show
 from matplotlib import pyplot as plt
 
 
-def run_demo(conn_file):
+#!/usr/bin/env python3
+"""
+example of BIDS app for BIDS compmodels
+
+"""
+
+import argparse
+import os
+import subprocess
+import nibabel
+import numpy
+from glob import glob
+import pandas
+import json
+from bids import BIDSLayout, BIDSValidator
+
+__version__ = open(os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                                    'version')).read()
+def run_demo(conn_file,output_dir):
 
     oscillator = models.Generic2dOscillator()
     white_matter = connectivity.Connectivity(load_default=True)
@@ -65,13 +83,14 @@ def run_demo(conn_file):
     #Show them
     #show()
 
-    numpy.save('roi_data.npy', tavg_data)
+    numpy.save(output_dir + '/roi_data.npy', tavg_data)
 
 
 if __name__ == '__main__':
 
     conn_file = sys.argv[1]
+    output_dir = sys.argv[2]
 
-    run_demo(conn_file)
+    run_demo(conn_file,output_dir)
 
 
