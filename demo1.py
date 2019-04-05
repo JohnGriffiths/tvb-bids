@@ -35,34 +35,44 @@ __version__ = open(os.path.join(os.path.dirname(os.path.realpath(__file__)),
 def run_demo(input_dir,output_dir,subnum):
 
     weights,lengths = read_inputs(input_dir,subnum)
-    neuralstates = run_tvb_sim(weights,lengths)
-    write_outputs(output_dir,subnum,neuralstates)
+    raw_data,tavg_data = run_tvb_sim(weights,lengths)
+    write_outputs(output_dir,subnum,raw_data,tavg_data)
 
 
 def read_inputs(input_dir,subnum):
 
-    weights_file = '%s/sub-0%s/connectivity/sub-0%s_desc-weight_conndata-network_connectivity.tsv' %(input_dir,subnum,subnum)
+    weights_file = '%s/sub-%s/connectivity/sub-%s_desc-weights_conndata-network_connectivity.tsv' %(input_dir,subnum,subnum)
 
-    lengths_file = '%s/sub-0%s/connectivity/sub-0%s_desc-distance_conndata-network_connectivity.tsv' %(input_dir,subnum,subnum)
+    lengths_file = '%s/sub-%s/connectivity/sub-%s_desc-distance_conndata-network_connectivity.tsv' %(input_dir,subnum,subnum)
 
-    weights = pd.read_csv(weights_file, sep='\t').values
-    lengths = pd.read_csv(lengths_file, sep='\t').values
+    weights = pd.read_csv(weights_file, sep='\t',header=None).values
+    lengths = pd.read_csv(lengths_file, sep='\t',header=None).values
 
     return weights,lengths
 
-def write_outputs(output_dir,subnum,neuralstates):
+def write_outputs(output_dir,subnum,raw_data,tavg_data):
        
-    neuralstates_file = '%s/sub-0%s/sub-0%s_desc-neuralstates.tsv' %(output_dir,subnum,subnum)
-    np.writetxt(neuralstates_file,neuralstates)
-
+    #raw_data,tavg_data = neuralstates
+    raw_file = '%s/sub-%s/sub-%s_desc-neuralstates_raw.npy' %(output_dir,subnum,subnum)
+    tavg_file = '%s/sub-%s/sub-%s_desc-neuralstates_tavg.npy' %(output_dir,subnum,subnum)
+    #np.writetxt(neuralstates_file,neuralstates)
+    #np.writetxt(neuralstates_file,neuralstates)
+    #pd.DataFrame(np.squeeze(neuralstates)).to_csv(neuralstates_file, sep='\t')
+    np.save(raw_file,raw_data)
+    np.save(tavg_file,tavg_data)
 
 def run_tvb_sim(weights,lengths):
 
     oscillator = models.Generic2dOscillator()
-    white_matter = connectivity.Connectivity(load_default=True)
+    white_matter = connectivity.Connectivity()#load_default=True)
+    white_matter.weights = weights
+    white_matter.tract_lengths = lengths
     white_matter.speed = numpy.array([4.0])
     white_matter_coupling = coupling.Linear(a=0.0154)
+    white_matter.configure()
+
     heunint = integrators.HeunDeterministic(dt=2**-6)
+
 
     mon_raw = monitors.Raw()
     mon_tavg = monitors.TemporalAverage(period=2**-2)
@@ -96,22 +106,22 @@ def run_tvb_sim(weights,lengths):
     TAVG = numpy.array(tavg_data)
 
     #Plot raw time series
-    figure(1)
-    plot(raw_time, RAW[:, 0, :, 0])
-    title("Raw -- State variable 0")
-    plt.savefig('figure1.png')
-    plt.close()
+    #figure(1)
+    #plot(raw_time, RAW[:, 0, :, 0])
+    #title("Raw -- State variable 0")
+    #plt.savefig('figure1.png')
+    #plt.close()
 
     #Plot temporally averaged time series
-    figure(2)
-    plot(tavg_time, TAVG[:, 0, :, 0])
-    title("Temporal average")
-    plt.savefig('figure2.png')
-    plt.close()
+    #figure(2)
+    #plot(tavg_time, TAVG[:, 0, :, 0])
+    #title("Temporal average")
+    #plt.savefig('figure2.png')
+    #plt.close()
     #Show them
     #show()
 
-    return tavg_data
+    return RAW,TAVG
     # numpy.save(output_dir + '/sub-01_desc-neuralstats.npy', tavg_data)
 
 
@@ -128,5 +138,5 @@ if __name__ == '__main__':
     #except: 
     #    #import pdb
     #    #pdb.set_trace()
-
-
+    
+    
