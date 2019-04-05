@@ -35,6 +35,9 @@ ADD conn76_weights.tsv /opt/conn76_weights.tsv
 
 ADD demo1.py /opt/run.py
 
+# this is for binder usage
+ADD bids_data bd
+
 CMD python /opt/run.py /bids-dataset /bids-dataset 01
 
 
