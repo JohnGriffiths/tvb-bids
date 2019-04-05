@@ -17,6 +17,6 @@ ADD conn76_weights.tsv /opt/conn76_weights.tsv
 
 # CMD python /opt/run.py conn76_weights.tsv
 
-CMD python /opt/run.py bids-dataset/conn76_weights.tsv bids-dataset
+CMD python /opt/run.py bids-dataset/conn76_weights.tsv /bids-dataset
 
 
