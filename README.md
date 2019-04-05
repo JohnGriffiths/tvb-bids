@@ -68,6 +68,16 @@ data_folder/sub-01/neuralstates/
 	sub-01_desc-neuralstates.tsv
 
 
+The python script itself is called from the command line as follows:
+
+python demo1.py inputfolder outputfolder subnum
+
+e.g. (from this folder):
+
+python demo1.py bids_data bids_data 01
+
+
+
 
 
 
