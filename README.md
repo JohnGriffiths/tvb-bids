@@ -1,5 +1,9 @@
 # tvb-bids
 
+
+[![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/JohnGriffiths/tvb-bids/master)
+
+
 First pass at a minimal TVB BIDS App
 
 ---
