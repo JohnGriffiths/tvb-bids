@@ -82,6 +82,15 @@ python demo1.py bids_data bids_data 01
 
 
 
+*Run on binder*
+
+1. Launch with the binder badge
+
+2. Open terminal
+
+3. cd /home/jovyan
+
+4. python /opt/run.py bd bd 01
 
 
 
