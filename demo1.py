@@ -26,9 +26,37 @@ import pandas
 import json
 from bids import BIDSLayout, BIDSValidator
 
+import numpy as np
+import pandas as pd
+
 __version__ = open(os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                     'version')).read()
-def run_demo(conn_file,output_dir):
+
+def run_demo(input_dir,output_dir,subnum):
+
+    weights,lengths = read_inputs(input_dir,subnum)
+    neuralstates = run_tvb_sim(weights,lengths)
+    write_outputs(output_dir,subnum,neuralstates)
+
+
+def read_inputs(input_dir,subnum):
+
+    weights_file = '%s/sub-0%s/connectivity/sub-0%s_desc-weight_conndata-network_connectivity.tsv' %(input_dir,subnum,subnum)
+
+    lengths_file = '%s/sub-0%s/connectivity/sub-0%s_desc-distance_conndata-network_connectivity.tsv' %(input_dir,subnum,subnum)
+
+    weights = pd.read_csv(weights_file, sep='\t').values
+    lengths = pd.read_csv(lengths_file, sep='\t').values
+
+    return weights,lengths
+
+def write_outputs(output_dir,subnum,neuralstates):
+       
+    neuralstates_file = '%s/sub-0%s/sub-0%s_desc-neuralstates.tsv' %(output_dir,subnum,subnum)
+    np.writetxt(neuralstates_file,neuralstates)
+
+
+def run_tvb_sim(weights,lengths):
 
     oscillator = models.Generic2dOscillator()
     white_matter = connectivity.Connectivity(load_default=True)
@@ -83,18 +111,22 @@ def run_demo(conn_file,output_dir):
     #Show them
     #show()
 
-    numpy.save(output_dir + '/roi_data.npy', tavg_data)
+    return tavg_data
+    # numpy.save(output_dir + '/sub-01_desc-neuralstats.npy', tavg_data)
+
 
 
 if __name__ == '__main__':
 
-    conn_file = sys.argv[1]
+    input_dir = sys.argv[1]
     output_dir = sys.argv[2]
+    subnum = sys.argv[3]
 
-    try:
-        run_demo(conn_file,output_dir)
-    except: 
-        import pdb
-        pdb.set_trace()
+    run_demo(input_dir,output_dir,subnum)
+    #try:
+    #    run_demo(input_dir,output_dir,subnum)
+    #except: 
+    #    #import pdb
+    #    #pdb.set_trace()
 
 
